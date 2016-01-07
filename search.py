@@ -210,12 +210,26 @@ def uniformCostSearch(problem):
             action = child[1]
             # print "Action: ", action
             act = [x for x in actions]
+            act.append(action)
             # print "Extracted actions: ", act
             # Check that node is not explored
             if state not in explored and state not in fringeStates.keys():
-                act.append(action)
                 fringe.push((state, act), problem.getCostOfActions(act))
                 fringeStates[state] = problem.getCostOfActions(act)
+            elif state in fringeStates.keys():
+                if problem.getCostOfActions(act) < fringeStates[state]:
+                    # There is a lower cost path for a node. Must make a new
+                    # fringe with the proper node
+                    temp = util.PriorityQueue()   # Create temporary pq
+                    while not fringe.isEmpty():     # Cycle through fringe
+                        item = fringe.pop() 
+                        if item[0][0] == state:     # find replacement
+                            temp.push((state, act),problem.getCostOfActions(act))
+                        else:
+                            temp.push(item)
+                    fringe = temp   # Renew fringe
+                                    
+
 
 def nullHeuristic(state, problem=None):
     """
