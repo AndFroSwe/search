@@ -178,17 +178,14 @@ def uniformCostSearch(problem):
     # Initialize variables
     fringe = util.PriorityQueue()
     explored = []
-    fringeStates = []
+    fringeStates = dict()
 
     # Expand starting state
     startNode = problem.getStartState()
-    # Test if first node goal state
-    if problem.isGoalState(startNode):
-        return []
     # Push first node onto fringe
-    #Each entry on fringe is tuple of form (state, [actions taken])
-    fringe.push((startNode, []), problem.getCostOfActions([]))
-    fringeStates.append(startNode)
+    #Each entry on fringe is tuple of form (state, [actions taken]), costOfActions
+    fringe.push((startNode, []), 0)
+    fringeStates[startNode] = 0
     # Search loop
     while(1):
         if fringe.isEmpty():# If no more nodes in fringe there is no solution
@@ -202,12 +199,9 @@ def uniformCostSearch(problem):
         if problem.isGoalState(fringeState):
             return actions
 
-        # print "Fringe Node: ", node
-        # print "Fringe State: ", fringeState
-        # print "Actions: ", actions
-
         # Add to explored
         explored.append(fringeState)
+
         # Generate children of node
         for child in problem.getSuccessors(fringeState):
             # print "Child: ", child
@@ -218,13 +212,10 @@ def uniformCostSearch(problem):
             act = [x for x in actions]
             # print "Extracted actions: ", act
             # Check that node is not explored
-            if state not in explored and state not in fringeStates:
+            if state not in explored and state not in fringeStates.keys():
                 act.append(action)
-                # print "Adding actions: ", act
-                # print act
-                # print problem.getCostOfActions(act)
                 fringe.push((state, act), problem.getCostOfActions(act))
-                fringeStates.append(state)
+                fringeStates[state] = problem.getCostOfActions(act)
 
 def nullHeuristic(state, problem=None):
     """
