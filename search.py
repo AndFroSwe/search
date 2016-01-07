@@ -239,9 +239,67 @@ def nullHeuristic(state, problem=None):
     return 0
 
 def aStarSearch(problem, heuristic=nullHeuristic):
-    """Search the node that has the lowest combined cost and heuristic first."""
+    """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    # Initialize variables
+    fringe = util.PriorityQueue()
+    explored = []
+    fringeStates = dict()
+
+    # Expand starting state
+    startNode = problem.getStartState()
+    # Push first node onto fringe
+    #Each entry on fringe is tuple of form (state, [actions taken]), costOfActions
+    fringe.push((startNode, []), 0)
+    fringeStates[startNode] = 0
+    # Search loop
+    while(1):
+        if fringe.isEmpty():# If no more nodes in fringe there is no solution
+            return False 
+        # Pop a node from fringe and extract the state and action
+        node = fringe.pop()
+        fringeState = node[0]
+        actions = node[1]
+
+        # Return if a goal state
+        if problem.isGoalState(fringeState):
+            return actions
+
+        # Add to explored
+        explored.append(fringeState)
+
+        # Generate children of node
+        for child in problem.getSuccessors(fringeState):
+            print "Child: ", child
+            # Extract state and action
+            state = child[0]
+            action = child[1]
+            # print "Action: ", action
+            act = [x for x in actions]
+            act.append(action)
+            # print "Extracted actions: ", act
+            # Check that node is not explored
+            if state not in explored and state not in fringeStates.keys():
+                g = problem.getCostOfActions(act)
+                h = heuristic(state, problem)
+                print "g = ", g
+                print "h = ", h
+                print "f = ", h + g
+                fringe.push((state, act), g + h)
+                fringeStates[state] = problem.getCostOfActions(act)
+            elif state in fringeStates.keys():
+                if g < fringeStates[state]:
+                    print "Duplicate found", state
+                    # There is a lower cost path for a node. Must make a new
+                    # fringe with the proper node
+                    temp = util.PriorityQueue()   # Create temporary pq
+                    while not fringe.isEmpty():     # Cycle through fringe
+                        item = fringe.pop() 
+                        if item[0][0] == state:     # find replacement
+                            temp.push((state, act), g)
+                        else:
+                            temp.push(item, problem.getCostOfActions(item[1]))
+                    fringe = temp   # Renew fringe
 
 
 # Abbreviations
