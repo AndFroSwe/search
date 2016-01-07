@@ -92,12 +92,14 @@ def depthFirstSearch(problem):
     # Initialize variables
     fringe = util.Stack()
     explored = []
+    fringeStates = []   # Keeps track of current states on fringe
 
     # Expand starting state
     startNode = problem.getStartState()
     # Push first node onto fringe
     #Each entry on fringe is tuple of form (state, [actions taken])
     fringe.push((startNode, []))
+    fringeStates.append(startNode)
     # Search loop
     while(1):
         if fringe.isEmpty():# If no more nodes in fringe there is no solution
@@ -106,6 +108,8 @@ def depthFirstSearch(problem):
         node = fringe.pop()
         fringeState = node[0]
         actions = node[1]
+        # Remove state from current states check
+        fringeStates.remove(fringeState)
         # Return if a goal state
         if problem.isGoalState(fringeState):
             return actions
@@ -122,6 +126,8 @@ def depthFirstSearch(problem):
                 # Add action and push node onto fringe
                 act.append(action)
                 fringe.push((state, act))
+                fringeStates.append(state)
+
                     
 
 def breadthFirstSearch(problem):
@@ -130,6 +136,49 @@ def breadthFirstSearch(problem):
     # Initialize variables
     fringe = util.Queue()
     explored = []
+    fringeStates = []   # Keeps track of current states on fringe
+
+    # Expand starting state
+    startNode = problem.getStartState()
+    # Push first node onto fringe
+    #Each entry on fringe is tuple of form (state, [actions taken])
+    fringe.push((startNode, []))
+    fringeStates.append(startNode)
+    # Search loop
+    while(1):
+        if fringe.isEmpty():# If no more nodes in fringe there is no solution
+            return False 
+        # Pop a node from fringe and extract the state and action
+        node = fringe.pop()
+        fringeState = node[0]
+        actions = node[1]
+        # Remove state from current states check
+        fringeStates.remove(fringeState)
+        # Return if a goal state
+        if problem.isGoalState(fringeState):
+            return actions
+        # Add to explored
+        explored.append(fringeState)
+        # Generate children of node
+        for child in problem.getSuccessors(fringeState):
+            # Extract state and action
+            state = child[0]
+            action = child[1]
+            act = [x for x in actions]
+            # Check that node is not explored
+            if state not in explored and state not in fringeStates: 
+                # Add action and push node onto fringe
+                act.append(action)
+                fringe.push((state, act))
+                fringeStates.append(state)
+
+def uniformCostSearch(problem):
+    """Search the node of least total cost first."""
+    "*** YOUR CODE HERE ***"
+    # Initialize variables
+    fringe = util.PriorityQueue()
+    explored = []
+    fringeStates = []
 
     # Expand starting state
     startNode = problem.getStartState()
@@ -138,7 +187,8 @@ def breadthFirstSearch(problem):
         return []
     # Push first node onto fringe
     #Each entry on fringe is tuple of form (state, [actions taken])
-    fringe.push((startNode, []))
+    fringe.push((startNode, []), problem.getCostOfActions([]))
+    fringeStates.append(startNode)
     # Search loop
     while(1):
         if fringe.isEmpty():# If no more nodes in fringe there is no solution
@@ -168,15 +218,13 @@ def breadthFirstSearch(problem):
             act = [x for x in actions]
             # print "Extracted actions: ", act
             # Check that node is not explored
-            if state not in explored and state not in [x[0] for x in fringe.list]:
+            if state not in explored and state not in fringeStates:
                 act.append(action)
                 # print "Adding actions: ", act
-                fringe.push((state, act))
-
-def uniformCostSearch(problem):
-    """Search the node of least total cost first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+                # print act
+                # print problem.getCostOfActions(act)
+                fringe.push((state, act), problem.getCostOfActions(act))
+                fringeStates.append(state)
 
 def nullHeuristic(state, problem=None):
     """
