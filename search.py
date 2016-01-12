@@ -140,6 +140,7 @@ def breadthFirstSearch(problem):
 
     # Expand starting state
     startNode = problem.getStartState()
+    print "Starting at: ", startNode
     # Push first node onto fringe
     #Each entry on fringe is tuple of form (state, [actions taken])
     fringe.push((startNode, []))
@@ -150,20 +151,25 @@ def breadthFirstSearch(problem):
             return False 
         # Pop a node from fringe and extract the state and action
         node = fringe.pop()
+        # print "Node: ", node
         fringeState = node[0]
         actions = node[1]
         # Remove state from current states check
         fringeStates.remove(fringeState)
         # Return if a goal state
         if problem.isGoalState(fringeState):
+            print "Actions: ", actions
             return actions
         # Add to explored
         explored.append(fringeState)
         # Generate children of node
         for child in problem.getSuccessors(fringeState):
+            # print "Child: ", child
             # Extract state and action
             state = child[0]
             action = child[1]
+            # print "State: ", state
+            # print "Action: ", action
             act = [x for x in actions]
             # Check that node is not explored
             if state not in explored and state not in fringeStates: 
