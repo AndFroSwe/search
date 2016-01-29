@@ -271,7 +271,7 @@ class CornerState():
 
     """Class contains state representation for the corners problem"""
 
-    def __init__(self, postition, visited = [False]*4):
+    def __init__(self, postition, visited):
         """Set which corners are visited and which position it relates to
 
         :visited: TODO
@@ -280,7 +280,7 @@ class CornerState():
         """
         self._visited = visited
         self._postition = postition
-        
+
     def __eq__(self, other):
         """Compare states
 
@@ -349,7 +349,12 @@ class CornersProblem(search.SearchProblem):
         """
         "*** YOUR CODE HERE ***"
         # Return state with starting position and all corners visited as false
-        return CornerState(self.startingPosition)
+        startPosition = self.startingPosition
+        visited = dict()
+        for corner in self.corners:
+            visited[corner] = False
+        newState = CornerState(startPosition, visited)
+        return newState
 
     def isGoalState(self, state):
         """
@@ -368,7 +373,6 @@ class CornersProblem(search.SearchProblem):
             state, 'action' is the action required to get there, and 'stepCost'
             is the incremental cost of expanding to that successor
         """
-
         successors = []
         for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
             # Add a successor state to the successor list if the action is legal
@@ -377,11 +381,14 @@ class CornersProblem(search.SearchProblem):
             #   dx, dy = Actions.directionToVector(action)
             #   nextx, nexty = int(x + dx), int(y + dy)
             #   hitsWall = self.walls[nextx][nexty]
-            x, y = state
+            x, y = state.getState()
+            visited = state.getVisited()
             dx, dy = Actions.directionToVector(action)
             nextx, nexty = int(x + dx), int(y + dy)
             if not self.walls[nextx][nexty]:
-                nextState = (nextx, nexty)
+                nextPosition = (nextx, nexty)
+
+
                 successors.append( ( nextState, action) )
 
         self._expanded += 1 # DO NOT CHANGE
