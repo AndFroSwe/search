@@ -175,6 +175,7 @@ def breadthFirstSearch(problem):
             if state not in explored and state not in fringeStates: 
                 # Add action and push node onto fringe
                 act.append(action)
+                pring act
                 fringe.push((state, act))
                 fringeStates.append(state)
 
