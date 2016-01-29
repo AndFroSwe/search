@@ -164,7 +164,7 @@ def breadthFirstSearch(problem):
         explored.append(fringeState)
         # Generate children of node
         for child in problem.getSuccessors(fringeState):
-            # print "Child: ", child
+            print "Child: ", child
             # Extract state and action
             state = child[0]
             action = child[1]

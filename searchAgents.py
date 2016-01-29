@@ -278,8 +278,11 @@ class CornerState():
         :postition: TODO
 
         """
-        self._visited = visited
         self._postition = postition
+        self._visited = visited
+        # Check if position is a corner and add to visited
+        if _position in self._visited.keys():
+            self._visited[postition] = True
 
     def __eq__(self, other):
         """Compare states
@@ -297,7 +300,7 @@ class CornerState():
 
         """
         outstr = "Position: " + str(self.getState()) + "\n"
-        outstr += "Visited: " + str(self.getVisited())
+        outstr += "Visited: " + str(self.getCornersAndVisited())
         return outstr
 
     def getVisited(self):
@@ -307,7 +310,7 @@ class CornerState():
         :returns: TODO
 
         """
-        return self._visited
+        return self._visited.values()
 
     def getState(self):
         """TODO: Docstring for getState.
@@ -318,6 +321,19 @@ class CornerState():
         """
         return self._postition
 
+    def getCorners(self):
+        """TODO: Docstring for getCorners.
+        :returns: TODO
+
+        """
+        return self._visited.keys()
+
+    def getCornersAndVisited(self):
+        """TODO: Docstring for getCornersAndVisited.
+        :returns: TODO
+
+        """
+        return self._visited
 
 class CornersProblem(search.SearchProblem):
     """
@@ -361,8 +377,11 @@ class CornersProblem(search.SearchProblem):
         Returns whether this search state is a goal state of the problem.
         """
         "*** YOUR CODE HERE ***"
-        pass
-
+        if False in state.getVisited():
+            return False
+        else:
+            return True
+    
     def getSuccessors(self, state):
         """
         Returns successor states, the actions they require, and a cost of 1.
@@ -382,14 +401,13 @@ class CornersProblem(search.SearchProblem):
             #   nextx, nexty = int(x + dx), int(y + dy)
             #   hitsWall = self.walls[nextx][nexty]
             x, y = state.getState()
-            visited = state.getVisited()
+            visited = state.getCornersAndVisited()
             dx, dy = Actions.directionToVector(action)
             nextx, nexty = int(x + dx), int(y + dy)
             if not self.walls[nextx][nexty]:
                 nextPosition = (nextx, nexty)
-
-
-                successors.append( ( nextState, action) )
+                newState = CornerState(nextPosition, visited)
+                successors.append(newState)
 
         self._expanded += 1 # DO NOT CHANGE
         return successors
