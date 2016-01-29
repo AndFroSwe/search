@@ -169,7 +169,7 @@ def breadthFirstSearch(problem):
         print "Finding successors..."
         for child in problem.getSuccessors(fringeState):
             print "##################################"
-            raw_input("Successor...")
+            # raw_input("Successor...")
             # Extract state and action
             state = child[0]
             action = child[1]
