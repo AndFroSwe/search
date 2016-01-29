@@ -377,9 +377,12 @@ class CornersProblem(search.SearchProblem):
         Returns whether this search state is a goal state of the problem.
         """
         "*** YOUR CODE HERE ***"
+        print state.getVisited()
         if False in state.getVisited():
+            print "nope"
             return False
         else:
+            print "yep"
             return True
     
     def getSuccessors(self, state):
