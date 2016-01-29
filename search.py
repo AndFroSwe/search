@@ -140,7 +140,7 @@ def breadthFirstSearch(problem):
 
     # Expand starting state
     startNode = problem.getStartState()
-    print "Starting at: ", startNode
+    print "Starting at: \n" + str(startNode)
     # Push first node onto fringe
     #Each entry on fringe is tuple of form (state, [actions taken])
     fringe.push((startNode, []))

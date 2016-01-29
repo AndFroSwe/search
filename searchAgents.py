@@ -267,6 +267,58 @@ def euclideanHeuristic(position, problem, info={}):
 # This portion is incomplete.  Time to write code!  #
 #####################################################
 
+class CornerState():
+
+    """Class contains state representation for the corners problem"""
+
+    def __init__(self, postition, visited = [False]*4):
+        """Set which corners are visited and which position it relates to
+
+        :visited: TODO
+        :postition: TODO
+
+        """
+        self._visited = visited
+        self._postition = postition
+        
+    def __eq__(self, other):
+        """Compare states
+
+        :f: TODO
+        :returns: TODO
+
+        """
+
+        return self.getVisited() == other.getVisited() & self.getState() == other.getState()
+
+    def __str__(self):
+        """TODO: Docstring for __str__.
+        :returns: TODO
+
+        """
+        outstr = "Position: " + str(self.getState()) + "\n"
+        outstr += "Visited: " + str(self.getVisited())
+        return outstr
+
+    def getVisited(self):
+        """TODO: Docstring for getVisited.
+
+        :f: TODO
+        :returns: TODO
+
+        """
+        return self._visited
+
+    def getState(self):
+        """TODO: Docstring for getState.
+
+        :arg1: TODO
+        :returns: TODO
+
+        """
+        return self._postition
+
+
 class CornersProblem(search.SearchProblem):
     """
     This search problem finds paths through all four corners of a layout.
@@ -289,7 +341,6 @@ class CornersProblem(search.SearchProblem):
         # Please add any code here which you would like to use
         # in initializing the problem
         "*** YOUR CODE HERE ***"
-        self.visited = [False]*4
 
     def getStartState(self):
         """
@@ -297,33 +348,15 @@ class CornersProblem(search.SearchProblem):
         space)
         """
         "*** YOUR CODE HERE ***"
-        start = self.startingPosition
-        # Initialize cornerstate vector
-        # Add all starting states in order bottomleft, topleft, bottomright,
-        # topright
-        return start
+        # Return state with starting position and all corners visited as false
+        return CornerState(self.startingPosition)
 
     def isGoalState(self, state):
         """
         Returns whether this search state is a goal state of the problem.
         """
         "*** YOUR CODE HERE ***"
-        # Cycle through all corners
-        position = state
-        print "State: ", state
-        for index, corner in enumerate(self.corners):
-        # If on a corner, add to visited
-            if state == corner:
-                self.visited[index] = True
-            # Check if corner not visited, then not goal
-            # if not self.visited[index]:
-                # print "Corners: ", self.visited
-                # return False
-        print "Corners: ", self.visited
-        if False in self.visited:
-            return False
-        print "Goal reached!"
-        return True
+        pass
 
     def getSuccessors(self, state):
         """
