@@ -271,18 +271,18 @@ class CornerState():
 
     """Class contains state representation for the corners problem"""
 
-    def __init__(self, postition, visited):
+    def __init__(self, position, visited):
         """Set which corners are visited and which position it relates to
 
         :visited: TODO
         :postition: TODO
 
         """
-        self._postition = postition
+        self._position = position
         self._visited = visited
         # Check if position is a corner and add to visited
-        if _position in self._visited.keys():
-            self._visited[postition] = True
+        if position in self._visited.keys():
+            self._visited[position] = True
 
     def __eq__(self, other):
         """Compare states
@@ -292,7 +292,7 @@ class CornerState():
 
         """
 
-        return self.getVisited() == other.getVisited() & self.getState() == other.getState()
+        return (self.getVisited() == other.getVisited()) & (self.getState() == other.getState())
 
     def __str__(self):
         """TODO: Docstring for __str__.
@@ -302,7 +302,7 @@ class CornerState():
         outstr = "Position: " + str(self.getState()) + "\n"
         outstr += "Visited: " + str(self.getCornersAndVisited())
         return outstr
-
+    
     def getVisited(self):
         """TODO: Docstring for getVisited.
 
@@ -319,7 +319,7 @@ class CornerState():
         :returns: TODO
 
         """
-        return self._postition
+        return self._position
 
     def getCorners(self):
         """TODO: Docstring for getCorners.
@@ -407,7 +407,7 @@ class CornersProblem(search.SearchProblem):
             if not self.walls[nextx][nexty]:
                 nextPosition = (nextx, nexty)
                 newState = CornerState(nextPosition, visited)
-                successors.append(newState)
+                successors.append((newState, action))
 
         self._expanded += 1 # DO NOT CHANGE
         return successors
