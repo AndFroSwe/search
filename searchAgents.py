@@ -452,7 +452,7 @@ def cornersHeuristic(state, problem):
             dist = util.manhattanDistance(state.getState(), corner)
             if dist < min_dist:
                 min_dist = dist
-    return dist # Default to trivial solution
+    return dist
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"

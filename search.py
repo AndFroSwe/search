@@ -245,14 +245,14 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     # Initialize variables
     fringe = util.PriorityQueue()
     explored = []
-    fringeStates = dict()
+    fringeStates = []
 
     # Expand starting state
     startNode = problem.getStartState()
     # Push first node onto fringe
-    #Each entry on fringe is tuple of form (state, [actions taken]), costOfActions
+    #Each entry on fringe is tuple of form (state, [actions taken]), costOfActions)
     fringe.push((startNode, []), 0)
-    fringeStates[startNode] = 0
+    fringeStates.append((startNode, 0))
     # Search loop
     while(1):
         if fringe.isEmpty():# If no more nodes in fringe there is no solution
@@ -279,13 +279,14 @@ def aStarSearch(problem, heuristic=nullHeuristic):
             # Check that node is not explored
             g = problem.getCostOfActions(act)
             h = heuristic(state, problem)
-            if state not in explored and state not in fringeStates.keys():
+            if state not in explored and state not in [x[0] for x in fringeStates]:
                 fringe.push((state, act), g + h)
-                fringeStates[state] = g 
-            elif state in fringeStates.keys():
-                if g < fringeStates[state]:
-                    # There is a lower cost path for a node. Must make a new
-                    # fringe with the proper node
+                fringeStates.append((state, g))
+            # Check to see if state is on fringe and the fringe state has a higher
+            # cost than the current state
+            for stateOnFringe in [x for x in fringeStates]:
+                if (stateOnFringe[0] == state) and (stateOnFringe[1] > g):
+                    # Create a new prioq where the new state cost is added
                     temp = util.PriorityQueue()   # Create temporary pq
                     while not fringe.isEmpty():     # Cycle through fringe
                         item = fringe.pop() 
@@ -296,8 +297,8 @@ def aStarSearch(problem, heuristic=nullHeuristic):
                             temp.push(item, problem.getCostOfActions(item[1]) +
                                     heuristic(item[0], problem))
                     fringe = temp   # Renew fringe
-                    fringeStates.pop(state) # Remove old entry
-                    fringeStates[state] = g # Add new entry
+                    fringeStates.remove(stateOnFringe) # Remove old entry
+                    fringeStates.append((state, g)) # Add new entry
 
 
 # Abbreviations
