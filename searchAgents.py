@@ -408,7 +408,7 @@ class CornersProblem(search.SearchProblem):
             if not self.walls[nextx][nexty]:
                 nextPosition = (nextx, nexty)
                 newState = CornerState(nextPosition, visited)
-                successors.append((newState, action))
+                successors.append((newState, action, 1))
 
         self._expanded += 1 # DO NOT CHANGE
         return successors
