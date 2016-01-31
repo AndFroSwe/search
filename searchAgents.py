@@ -445,11 +445,16 @@ def cornersHeuristic(state, problem):
 
     "*** YOUR CODE HERE ***"
     """ Use a heuristic that always shows the path to the nearest unvisited corner """
-    corners = state.getCornersAndVisited()
+    # corners = state.getCornersAndVisited()
     min_dist = 9999999
+    dist = 0
+    stateCorners = state.getCornersAndVisited()
     for corner in corners: # Iterates over keys (corner positions)
-        if not corners[corner]:
+        # print "Corner visted: ", str(stateCorners[corner])
+        # print "Switch: ", str(not stateCorners[corner])
+        if not stateCorners[corner]:
             dist = util.manhattanDistance(state.getState(), corner)
+            # print "Finding distance: ", str(dist)
             if dist < min_dist:
                 min_dist = dist
     return dist

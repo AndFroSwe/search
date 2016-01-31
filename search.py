@@ -290,7 +290,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
                     temp = util.PriorityQueue()   # Create temporary pq
                     while not fringe.isEmpty():     # Cycle through fringe
                         item = fringe.pop() 
-                        if item[0][0] == state:     # find replacement
+                        if item[0] == state:     # find replacement
                             temp.push((state, act), g + h)
                         else:
                             # Push with g and h
