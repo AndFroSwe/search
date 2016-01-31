@@ -444,17 +444,14 @@ def cornersHeuristic(state, problem):
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
 
     "*** YOUR CODE HERE ***"
-    """ Use a heuristic that always shows the path to the nearest unvisited corner """
+    """ Use a heuristic that is distance to all remaining fruits """
     # corners = state.getCornersAndVisited()
     min_dist = 9999999
     dist = 0
     stateCorners = state.getCornersAndVisited()
     for corner in corners: # Iterates over keys (corner positions)
-        # print "Corner visted: ", str(stateCorners[corner])
-        # print "Switch: ", str(not stateCorners[corner])
         if not stateCorners[corner]:
             dist = util.manhattanDistance(state.getState(), corner)
-            # print "Finding distance: ", str(dist)
             if dist < min_dist:
                 min_dist = dist
     return dist
@@ -551,7 +548,10 @@ def foodHeuristic(state, problem):
     """
     position, foodGrid = state
     "*** YOUR CODE HERE ***"
-    return 0
+    """ A heuristic to count the remaining number of fruits """
+    fruits = foodGrid.asList()
+
+    return len(fruits)
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
@@ -582,7 +582,8 @@ class ClosestDotSearchAgent(SearchAgent):
         problem = AnyFoodSearchProblem(gameState)
 
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        return search.breadthFirstSearch(problem)
+
 
 class AnyFoodSearchProblem(PositionSearchProblem):
     """
@@ -618,7 +619,7 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         x,y = state
 
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        return ((x,y) in self.food.asList())
 
 def mazeDistance(point1, point2, gameState):
     """
