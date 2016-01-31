@@ -444,17 +444,36 @@ def cornersHeuristic(state, problem):
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
 
     "*** YOUR CODE HERE ***"
-    """ Use a heuristic that is distance to all remaining fruits """
+    """ Use a heuristic that is distance to the distance to the nearest fruit
+    plus the distance between the remaining fruits """
     # corners = state.getCornersAndVisited()
     min_dist = 9999999
-    dist = 0
+    total_dist = 0
     stateCorners = state.getCornersAndVisited()
-    for corner in corners: # Iterates over keys (corner positions)
-        if not stateCorners[corner]:
-            dist = util.manhattanDistance(state.getState(), corner)
+    unvisited = [x for x in stateCorners.keys() if not stateCorners[x]]
+    currentPosition = state.getState()
+    # print "------------------"
+    while len(unvisited) != 0:
+        min_dist = 99999999
+        # Find nearest corner
+        for corner in unvisited: # Iterates over keys (corner positions)
+            dist = util.manhattanDistance(currentPosition, corner)
             if dist < min_dist:
+                nearest = corner
+                nearesDist = dist
                 min_dist = dist
-    return dist
+        # Add the manhattan cost and set corner to new position
+        # print "Position: ", str(currentPosition)
+        # print "Of corners: ", str(unvisited)
+        # print "Nearest corner: ", str(corner)
+        currentPosition = nearest
+        if currentPosition in unvisited:
+            # print "REMOVEING"
+            unvisited.remove(currentPosition)
+        # print "Cost: ", str(nearesDist)
+        total_dist += nearesDist
+
+    return total_dist
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
