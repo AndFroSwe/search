@@ -568,9 +568,16 @@ def foodHeuristic(state, problem):
     position, foodGrid = state
     "*** YOUR CODE HERE ***"
     """ A heuristic to count the remaining number of fruits """
+    maxDist = 0
+    farthest = 0
     fruits = foodGrid.asList()
+    for fruit in fruits:
+        dist = util.manhattanDistance(position, fruit)
+        if dist > maxDist:
+            farthest = dist
+            maxDist = dist
 
-    return len(fruits)
+    return farthest
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
